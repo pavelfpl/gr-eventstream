@@ -93,10 +93,10 @@ void es_source_thread::do_work(){
             for(int i=0 ; i<out_sig.size(); i++){
                 int itemsize = out_sig[i];
 
-//                printf("allocating buffer idx = %d, itemsize = %d, n_items = %d\n", i, itemsize, n_items);
+//              printf("allocating buffer idx = %d, itemsize = %d, n_items = %d\n", i, itemsize, n_items);
                 
                 if(zerobuf.size() < itemsize*n_items){
-                    zerobuf.resize(itemsize*n_items);
+                   zerobuf.resize(itemsize*n_items);
                 }
                 pmt_t buf = pmt::make_blob(&zerobuf[0],itemsize*n_items);
 
@@ -129,7 +129,7 @@ void es_source_thread::do_work(){
 
             // disabled for now, we need to worry about cleaning up leaks later ...
             // delete the pair, (the event should be ref counted underneath and uneffected)
-            //delete eh;
+            delete eh;
 
         }
     }

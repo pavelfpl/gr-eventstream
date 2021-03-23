@@ -210,8 +210,8 @@ int es_queue::add_event(pmt_t evt){
         DEBUG(printf("handler = %s\n", pmt::write_string(pmt::car(handlers)).c_str());)
         DEBUG(printf("is any = %d, is ma = %d\n", pmt::is_any(pmt::car(handlers)), pmt::is_msg_accepter(pmt::car(handlers)));)
 
-        // by default we add to queue
-        bool append_pair = true;
+        // by default we add to queue / default is true
+        bool append_pair = true; // true
 
 
         // TODO: when the flowgraph is not yet running, we should not call callbacks yet!!
@@ -221,14 +221,16 @@ int es_queue::add_event(pmt_t evt){
         // if any return false, suppress addition to queue
         for(int i=0; i < cb_list.size(); i++ ){
             bool rv = cb_list[i](&eh_pair);
-            append_pair = append_pair | rv;
+            append_pair = rv;  // append_pair | rv;
         }
 
         // conditionally add the eh pair to the queue
         if(append_pair){
-            event_queue.insert(event_queue.begin()+idx, eh_pair);
-            d_num_events_added++;
+           event_queue.insert(event_queue.begin()+idx, eh_pair);
+           d_num_events_added++;
         }
+        
+        printf("Event queue size: %d \n",event_queue.size());
 
         // iterate to next handler
         handlers = pmt::cdr(handlers);
